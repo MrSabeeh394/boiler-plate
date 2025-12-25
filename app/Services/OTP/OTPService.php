@@ -10,7 +10,8 @@ class OTPService implements OTPServiceInterface
     public function generate(string $identifier, int $length = 6, int $validityMinutes = 10): string
     {
         // Generate numeric OTP
-        $otp = (string) random_int(pow(10, $length - 1), pow(10, $length) - 1);
+        //$otp = (string) random_int(pow(10, $length - 1), pow(10, $length) - 1);
+        $otp = '123456'; // For testing purposes
         
         // Delete any existing OTPs for this identifier
         Otp::where('identifier', $identifier)->delete();

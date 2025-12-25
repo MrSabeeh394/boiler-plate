@@ -1,15 +1,16 @@
 <?php
 
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\Auth\ConfirmablePasswordController;
-use App\Http\Controllers\Auth\EmailVerificationNotificationController;
-use App\Http\Controllers\Auth\EmailVerificationPromptController;
-use App\Http\Controllers\Auth\NewPasswordController;
-use App\Http\Controllers\Auth\PasswordController;
-use App\Http\Controllers\Auth\PasswordResetLinkController;
-use App\Http\Controllers\Auth\RegisteredUserController;
-use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\MfaController;
+use App\Http\Controllers\Auth\PasswordController;
+use App\Http\Controllers\Auth\NewPasswordController;
+use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\Auth\PasswordResetLinkController;
+use App\Http\Controllers\Auth\ConfirmablePasswordController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\EmailVerificationPromptController;
+use App\Http\Controllers\Auth\EmailVerificationNotificationController;
 
 Route::middleware('guest')->group(function () {
     Route::get('register', [RegisteredUserController::class, 'create'])
@@ -35,10 +36,10 @@ Route::middleware('guest')->group(function () {
         ->name('password.store');
 
     // MFA Verification (guest can access during login flow)
-    Route::get('mfa/verify', [\App\Http\Controllers\Auth\MfaController::class, 'show'])
+    Route::get('mfa/verify', [MfaController::class, 'show'])
         ->name('mfa.verify');
     
-    Route::post('mfa/verify', [\App\Http\Controllers\Auth\MfaController::class, 'verify'])
+    Route::post('mfa/verify', [MfaController::class, 'verify'])
         ->name('mfa.verify.post');
 });
 
