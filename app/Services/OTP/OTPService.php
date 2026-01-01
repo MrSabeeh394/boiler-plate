@@ -2,16 +2,23 @@
 
 namespace App\Services\OTP;
 
+use App\Services\SMS\SMSServiceInterface;
 use App\Models\Otp;
 use Illuminate\Support\Facades\Hash;
 
 class OTPService implements OTPServiceInterface
 {
+    protected $smsService;
+
+    public function __construct(SMSServiceInterface $smsService)
+    {
+        $this->smsService = $smsService;
+    }
+
     public function generate(string $identifier, int $length = 6, int $validityMinutes = 10): string
     {
         // Generate numeric OTP
-        //$otp = (string) random_int(pow(10, $length - 1), pow(10, $length) - 1);
-        $otp = '123456'; // For testing purposes
+        $otp = (string) random_int(pow(10, $length - 1), pow(10, $length) - 1);
         
         // Delete any existing OTPs for this identifier
         Otp::where('identifier', $identifier)->delete();
@@ -61,5 +68,24 @@ class OTPService implements OTPServiceInterface
         $otpRecord->incrementAttempts();
 
         return false;
+    }
+
+    public function send(string $identifier, string $otp): bool
+    {
+        // Simple regex to check if identifier is an email
+        if (filter_var($identifier, FILTER_VALIDATE_EMAIL)) {
+            try {
+                \Illuminate\Support\Facades\Mail::to($identifier)->send(new \App\Mail\OtpMail($otp));
+                return true;
+            } catch (\Exception $e) {
+                \Illuminate\Support\Facades\Log::error('OTP Email Error: ' . $e->getMessage());
+                return false;
+            }
+        }
+
+        // Otherwise assume it's a phone number
+        $message = "Your verification code is: {$otp}. It will expire in " . config('otp.expiry_minutes', 10) . " minutes.";
+
+        return $this->smsService->send($identifier, $message);
     }
 }

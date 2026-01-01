@@ -22,4 +22,12 @@ interface OTPServiceInterface
      * @return bool
      */
     public function verify(string $identifier, string $otp): bool;
+    /**
+     * Send the OTP to the user.
+     *
+     * @param  string  $identifier
+     * @param  string  $otp
+     * @return bool
+     */
+    public function send(string $identifier, string $otp): bool;
 }

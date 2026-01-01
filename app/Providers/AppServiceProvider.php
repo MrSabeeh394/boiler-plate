@@ -15,6 +15,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(\App\Services\Image\ImageResizeServiceInterface::class, \App\Services\Image\ImageResizeService::class);
         $this->app->bind(\App\Services\Notification\NotificationServiceInterface::class, \App\Services\Notification\NotificationService::class);
         $this->app->bind(\App\Services\OTP\OTPServiceInterface::class, \App\Services\OTP\OTPService::class);
+        $this->app->bind(\App\Services\SMS\SMSServiceInterface::class, \App\Services\SMS\TwilioService::class);
         $this->app->bind(\App\Services\Activity\ActivityLoggingServiceInterface::class, \App\Services\Activity\ActivityLoggingService::class);
     }
 

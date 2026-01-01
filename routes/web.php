@@ -1,7 +1,11 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\OTPController;
 use Illuminate\Support\Facades\Route;
+
+Route::post('/otp/send', [OTPController::class, 'sendOtp'])->name('otp.send');
+Route::post('/otp/verify', [OTPController::class, 'verifyOtp'])->name('otp.verify');
 
 Route::get('/', function () {
     return view('welcome');
