@@ -51,7 +51,11 @@ class LoginRequest extends FormRequest
                 // Check if MFA is enabled
                 if ($user->mfa_enabled) {
                     $this->sendMfaOtp($user);
-                    session(['mfa_user_id' => $user->id, 'mfa_remember' => $this->boolean('remember')]);
+                    session([
+                        'mfa_user_id' => $user->id,
+                        'mfa_remember' => $this->boolean('remember'),
+                        'mfa_channel' => $user->mfa_channel
+                    ]);
                     throw ValidationException::withMessages([
                         'email' => 'Please enter the OTP sent to your ' . $user->mfa_channel . '.',
                     ])->redirectTo(route('mfa.verify'));
@@ -78,7 +82,11 @@ class LoginRequest extends FormRequest
         if ($user->mfa_enabled) {
             Auth::logout(); // Logout temporarily
             $this->sendMfaOtp($user);
-            session(['mfa_user_id' => $user->id, 'mfa_remember' => $this->boolean('remember')]);
+            session([
+                'mfa_user_id' => $user->id,
+                'mfa_remember' => $this->boolean('remember'),
+                'mfa_channel' => $user->mfa_channel
+            ]);
             throw ValidationException::withMessages([
                 'email' => 'Please enter the OTP sent to your ' . $user->mfa_channel . '.',
             ])->redirectTo(route('mfa.verify'));

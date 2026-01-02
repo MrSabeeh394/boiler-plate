@@ -2,7 +2,7 @@
     <div class="auth-header">
         <i class="bi bi-shield-lock" style="font-size: 3rem;"></i>
         <h2 class="mt-3">Two-Factor Authentication</h2>
-        <p>Enter the OTP code sent to your {{ session('mfa_channel', 'email') }}</p>
+        <p>Enter the OTP code sent to your {{ session('mfa_channel') === 'sms' ? 'phone number' : 'email' }}</p>
     </div>
 
     <div class="auth-body">
@@ -13,7 +13,7 @@
             <div class="alert alert-info d-flex align-items-center" role="alert">
                 <i class="bi bi-info-circle me-2"></i>
                 <div>
-                    Check your {{ session('mfa_channel', 'email') }} for a 6-digit verification code
+                    Check your {{ session('mfa_channel') === 'sms' ? 'phone number' : 'email' }} for a 6-digit verification code
                 </div>
             </div>
 
